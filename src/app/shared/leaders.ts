@@ -1,11 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Leader } from '../shared/leader';
-import { LeaderService } from '../services/leader.service';
-import { Params, ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
+import { Leader } from './leader';
 
-const LEADER = {
-  leaders: [
+export const LEADERS: Leader[] = [
     {
       id: 0,
       name: 'Peter Pan',
@@ -46,24 +41,4 @@ const LEADER = {
       // tslint:disable-next-line:max-line-length
       description: 'Award winning three-star Michelin chef with wide International experience having worked closely with whos-who in the culinary world, he specializes in creating mouthwatering Indo-Italian fusion experiences. He says, Put together the cuisines from the two craziest cultures, and you get a winning hit! Amma Mia!'
     }
-  ]
-};
-
-@Component({
-  selector: 'app-about',
-  templateUrl: './about.component.html',
-  styleUrls: ['./about.component.scss']
-})
-export class AboutComponent implements OnInit {
-  leader: Leader;
-  leaders = LEADER.leaders;
-
-  constructor(
-    private leaderservice: LeaderService, private route: ActivatedRoute) { }
-
-  ngOnInit() {
-    const id = +this.route.snapshot.params['id'];
-    this.leader = this.leaderservice.getLeader(id);
-    this.leader = this.leaderservice.getFeaturedLeader();
-  }
-}
+  ];

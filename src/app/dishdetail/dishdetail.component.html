@@ -1,12 +1,5 @@
-
-
-<div class="container"
-    fxLayout="row"
-    fxLayout.sm="column"
-    fxLayout.xs="column"
-    fxLayoutAlign.gt-md="space-around center"
-    fxLayoutGap="10px" 
-    fxLayoutGap.xs="0">
+<div class="container" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign.gt-md="space-around center"
+  fxLayoutGap="10px" fxLayoutGap.xs="0">
 
   <div fxFlex="40">
     <mat-card *ngIf="dish">
@@ -21,6 +14,7 @@
         </p>
       </mat-card-content>
       <mat-card-actions>
+        <button mat-button (click)="goBack()">BACK</button>
         <button mat-button>LIKE</button>
         <button mat-button>SHARE</button>
       </mat-card-actions>
@@ -29,7 +23,7 @@
 
   <div fxFlex="40" *ngIf="dish">
     <mat-list *ngFor="let comment of comments">
-        <p>{{comment.comment}}</p>
+      <p>{{comment.comment}}</p>
       <p>{{comment.rating}} Stars</p>
       <p>-- {{comment.author}} {{comment.date | date}}</p>
     </mat-list>
