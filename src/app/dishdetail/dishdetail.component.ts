@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Dish } from '../shared/dish';
 import { DishService } from '../services/dish.service';
 
 import { Params, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { switchMap } from 'rxjs/operators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { Rating } from '../shared/rating';
 
 const DISH = {
     id: '0',
@@ -55,17 +58,86 @@ const DISH = {
     styleUrls: ['./dishdetail.component.scss']
 })
 export class DishdetailComponent implements OnInit {
+    @ViewChild('fform') feedbackFormDirective;
 
     dish: Dish;
     dishIds: string[];
     prev: string;
     next: string;
 
+
+    feedbackForm: FormGroup;
+    rating: Rating;
+
+    formErrors = {
+        'name': '',
+        'message': '',
+      };
+
+    validationMessages = {
+        'name': {
+            'required': 'Name is required.',
+            'minlength': 'Name must be at least 2 characters long.',
+            'maxlength': 'Name cannot be more than 25 characters long.'
+        },
+        'message': {
+            'required': 'Comment is required.',
+            'minlength': 'Comment must be at least 5 characters long.',
+            'maxlength': 'Comment cannot be more than 125 characters long.'
+        }
+    };
+
     comments = DISH.comments;
 
     constructor(private dishservice: DishService,
-        private route: ActivatedRoute,
-        private location: Location) { }
+        private route: ActivatedRoute, private fb: FormBuilder,
+        private location: Location) { this.createForm(); }
+
+
+    createForm() {
+        this.feedbackForm = this.fb.group({
+            name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
+            agree: false,
+            message: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(125)]]
+        });
+
+        this.feedbackForm.valueChanges
+            .subscribe(data => this.onValueChanged(data));
+
+        this.onValueChanged();
+    }
+
+    onValueChanged(data?: any) {
+        if (!this.feedbackForm) { return; }
+        const form = this.feedbackForm;
+        for (const field in this.formErrors) {
+            if (this.formErrors.hasOwnProperty(field)) {
+                // clear previous error message (if any)
+                this.formErrors[field] = '';
+                const control = form.get(field);
+                if (control && control.dirty && !control.valid) {
+                    const messages = this.validationMessages[field];
+                    for (const key in control.errors) {
+                        if (control.errors.hasOwnProperty(key)) {
+                            this.formErrors[field] += messages[key] + ' ';
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    onSubmit() {
+        this.rating = this.feedbackForm.value;
+        console.log(this.rating);
+        this.feedbackForm.reset({
+            name: '',
+            agree: false,
+            message: ''
+        });
+        this.feedbackFormDirective.resetForm();
+    }
 
     ngOnInit() {
         this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds);

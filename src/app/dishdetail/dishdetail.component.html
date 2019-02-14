@@ -30,9 +30,37 @@
       <p>{{comment.rating}} Stars</p>
       <p>-- {{comment.author}} {{comment.date | date}}</p>
     </mat-list>
+
+  
+
+    <div class="form-size">
+        <p>{{ feedbackForm.value | json }}</p>
+
+        <form novalidate [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
+          <p>
+              <mat-form-field class="half-width">
+                  <input matInput formControlName="name" placeholder=" Name" type="text" required>
+                  <mat-error *ngIf="formErrors.name">{{formErrors.name}}</mat-error>
+                </mat-form-field>
+          </p>
+          <table class="form-size">
+            <td>
+                <mat-slider min="0" max="5" step="1" value="5" thumbLabel tickInterval="1"></mat-slider>
+            </td>
+            </table>
+          <p>
+            <mat-form-field class="full-width">
+              <textarea matInput formControlName="message" placeholder="Your Comment" rows=12 required></textarea>
+              <mat-error *ngIf="formErrors.message">{{formErrors.message}}</mat-error>
+            </mat-form-field>
+          </p>
+          <button type="submit" mat-button class="background-primary text-floral-white" [disabled]="feedbackForm.invalid">Submit</button>
+        </form>
+      </div>
   </div>
   <div [hidden]="dish">
     <mat-spinner></mat-spinner>
     <h4>Loading . . . Please Wait</h4>
   </div>
+
 </div>
