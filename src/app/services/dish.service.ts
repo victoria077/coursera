@@ -14,12 +14,16 @@ export class DishService {
     return of(DISHES).pipe(delay(2000));
   }
 
-  getDish(id: number): Observable<Dish> {
+  getDish(id: string): Observable<Dish> {
     return of(DISHES.filter((dish) => (dish.id === id))[0]).pipe(delay(2000));
   }
 
   getFeaturedDish(): Observable<Dish> {
     return of(DISHES.filter((dish) => dish.featured)[0]).pipe(delay(2000));
+  }
+
+  getDishIds(): Observable<string[] | any> {
+    return of(DISHES.map(dish => dish.id ));
   }
 }
 
