@@ -69,10 +69,12 @@ export class DishdetailComponent implements OnInit {
     feedbackForm: FormGroup;
     rating: Rating;
 
+    errMess: string;
+
     formErrors = {
         'author': '',
         'comment': '',
-      };
+    };
 
     validationMessages = {
         'author': {
@@ -129,22 +131,24 @@ export class DishdetailComponent implements OnInit {
     }
 
 
-    onSubmit() { this.rating = this.feedbackForm.value;
+    onSubmit() {
+    this.rating = this.feedbackForm.value;
         console.log(this.rating);
         const date = new Date();
         this.rating.date = date.toISOString();
         this.comments.push(this.rating);
         this.feedbackForm.reset({
-          author: '',
-          rating: '5',
-          comment: ''
+            author: '',
+            rating: '5',
+            comment: ''
         });
-      }
+    }
 
     ngOnInit() {
         this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
         this.route.params.pipe(switchMap((params: Params) => this.dishservice.getDish(params['id'])))
-            .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); });
+            .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); },
+                errmess => this.errMess = <any>errmess);
     }
 
     setPrevNext(dishId: string) {
