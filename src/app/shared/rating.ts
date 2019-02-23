@@ -1,6 +1,7 @@
 export class Rating {
-    name: string;
-    agree: boolean;
-    message: string;
+    rating: number;
+    comment: string;
+    author: string;
+    date: string;
 }
 

@@ -30,28 +30,28 @@
       <p>{{comment.rating}} Stars</p>
       <p>-- {{comment.author}} {{comment.date | date}}</p>
     </mat-list>
-
-  
+    <mat-list-item *ngIf="feedbackForm.valid">
+      <p matline="">{{ comment }}</p>
+      <p matline="">{{ rating }} Stars</p>
+      <p matline="">-- {{ author }} </p>
+  </mat-list-item>
 
     <div class="form-size">
-        <p>{{ feedbackForm.value | json }}</p>
 
         <form novalidate [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
           <p>
               <mat-form-field class="half-width">
-                  <input matInput formControlName="name" placeholder=" Name" type="text" required>
-                  <mat-error *ngIf="formErrors.name">{{formErrors.name}}</mat-error>
+                  <input matInput formControlName="author" placeholder=" Name" type="text" required [(ngModel)]="author">
+                  <mat-error *ngIf="formErrors.author">{{formErrors.author}}</mat-error>
                 </mat-form-field>
           </p>
-          <table class="form-size">
-            <td>
-                <mat-slider min="0" max="5" step="1" value="5" thumbLabel tickInterval="1"></mat-slider>
-            </td>
-            </table>
+          <p>
+            <mat-slider formControlName="rating" min="1" max="5" step="1" value="4" tickinterval="1" thumbLabel [(ngModel)]="rating"></mat-slider>
+          </p>
           <p>
             <mat-form-field class="full-width">
-              <textarea matInput formControlName="message" placeholder="Your Comment" rows=12 required></textarea>
-              <mat-error *ngIf="formErrors.message">{{formErrors.message}}</mat-error>
+              <textarea matInput formControlName="comment" placeholder="Your Comment" rows=12 required [(ngModel)]="comment"></textarea>
+              <mat-error *ngIf="formErrors.comment">{{formErrors.comment}}</mat-error>
             </mat-form-field>
           </p>
           <button type="submit" mat-button class="background-primary text-floral-white" [disabled]="feedbackForm.invalid">Submit</button>

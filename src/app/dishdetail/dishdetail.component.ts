@@ -70,17 +70,17 @@ export class DishdetailComponent implements OnInit {
     rating: Rating;
 
     formErrors = {
-        'name': '',
-        'message': '',
+        'author': '',
+        'comment': '',
       };
 
     validationMessages = {
-        'name': {
+        'author': {
             'required': 'Name is required.',
             'minlength': 'Name must be at least 2 characters long.',
             'maxlength': 'Name cannot be more than 25 characters long.'
         },
-        'message': {
+        'comment': {
             'required': 'Comment is required.',
             'minlength': 'Comment must be at least 5 characters long.',
             'maxlength': 'Comment cannot be more than 125 characters long.'
@@ -96,9 +96,9 @@ export class DishdetailComponent implements OnInit {
 
     createForm() {
         this.feedbackForm = this.fb.group({
-            name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
-            agree: false,
-            message: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(125)]]
+            'author': ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
+            'rating': '',
+            'comment': ['', [Validators.required, Validators.minLength(5), Validators.maxLength(125)]]
         });
 
         this.feedbackForm.valueChanges
@@ -128,16 +128,17 @@ export class DishdetailComponent implements OnInit {
     }
 
 
-    onSubmit() {
-        this.rating = this.feedbackForm.value;
+    onSubmit() { this.rating = this.feedbackForm.value;
         console.log(this.rating);
+        const date = new Date();
+        this.rating.date = date.toISOString();
+        this.comments.push(this.rating);
         this.feedbackForm.reset({
-            name: '',
-            agree: false,
-            message: ''
+          author: '',
+          rating: '5',
+          comment: ''
         });
-        this.feedbackFormDirective.resetForm();
-    }
+      }
 
     ngOnInit() {
         this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
