@@ -12,9 +12,10 @@ import { ProcessHTTPMsgService } from './process-httpmsg.service';
   providedIn: 'root'
 })
 export class DishService {
+  HttpHeaders: any;
 
   constructor(private http: HttpClient,
-    private processHTTPMsgService: ProcessHTTPMsgService) { }
+    private processHTTPMsgService: ProcessHTTPMsgService, ) { }
 
   getDishes(): Observable<Dish[]> {
     return this.http.get<Dish[]>(BaseURL + 'dishes')
@@ -34,6 +35,17 @@ export class DishService {
   getDishIds(): Observable<number[] | any> {
     return this.getDishes().pipe(map(dishes => dishes.map(dish => dish.id)))
       .pipe(catchError(error => error));
+  }
+
+  putDish(dish: Dish): Observable<Dish> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    return this.http.put<Dish>(BaseURL + 'dishes/' + dish.id, dish, httpOptions)
+      .pipe(catchError(this.processHTTPMsgService.handleError));
+
   }
 }
 
